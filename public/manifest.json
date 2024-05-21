@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "BidFast",
+  "version": "0.1.0",
+  "permissions": ["scripting", "tabs", "storage"],
+  "action": { "default_popup": "index.html" },
+  "host_permissions": ["https://*.upwork.com/*"],
+  "background": {
+    "service_worker": "src/background/index.ts"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.upwork.com/ab/proposals/*"],
+      "js": ["src/content/index.ts"]
+    }
+  ]
+}
