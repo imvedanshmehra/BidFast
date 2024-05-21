@@ -1,3 +1,5 @@
+const localChromeStorage = chrome?.storage?.local;
+
 const isElementLoaded = async (selector: string) => {
   while (document.querySelector(selector) === null) {
     await new Promise((resolve) => requestAnimationFrame(resolve));
@@ -6,8 +8,8 @@ const isElementLoaded = async (selector: string) => {
 };
 
 isElementLoaded(".air3-textarea .inner-textarea")?.then(() => {
-  chrome?.storage?.local?.get(["proposal"], (data) => {
-    if (data?.proposal) {
+  localChromeStorage?.get(["proposal", "autoFillCoverLetter"], (data) => {
+    if (data?.autoFillCoverLetter && data?.proposal) {
       const coverLetterTextArea = document.getElementsByClassName(
         "air3-textarea inner-textarea"
       )[0] as HTMLInputElement;
