@@ -172,9 +172,15 @@ const App = () => {
                     rows={12}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     placeholder="Your customized proposal..."
+                    maxLength={5000}
                     value={proposal}
                     onChange={(e) => setProposal(e?.target?.value)}
                   />
+                  {!!proposal && (
+                    <p className="text-xs font-light">
+                      {5000 - proposal?.length} Characters Left
+                    </p>
+                  )}
                   <div className="flex items-center justify-end mt-2">
                     <input
                       id="default-checkbox"
@@ -216,9 +222,15 @@ const App = () => {
                     rows={12}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     placeholder="Your customized proposal..."
+                    maxLength={5000}
                     value={proposal2}
                     onChange={(e) => setProposal2(e?.target?.value)}
                   />
+                  {!!proposal2 && (
+                    <p className="text-xs font-light">
+                      {5000 - proposal2?.length} Characters Left
+                    </p>
+                  )}
                   <div className="flex items-center justify-end mt-2">
                     <input
                       id="default-checkbox"
