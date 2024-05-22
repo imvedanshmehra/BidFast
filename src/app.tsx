@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Accordion from "./components/accordion";
 import Tag from "./components/tag";
+import { CheckCircleFilled } from "@ant-design/icons";
 
 const App = () => {
   const [autoFillEnabled, setAutoFillEnabled] = useState(false);
@@ -116,7 +117,9 @@ const App = () => {
                   >
                     Proposal 1
                   </label>
-                  {defaultProposal === 0 && <Tag text="Default" />}
+                  {defaultProposal === 0 && (
+                    <Tag text="Default" extra={<CheckCircleFilled />} />
+                  )}
                 </div>
               ),
               children: (
@@ -158,7 +161,9 @@ const App = () => {
                   >
                     Proposal 2
                   </label>
-                  {defaultProposal === 1 && <Tag text="Default" />}
+                  {defaultProposal === 1 && (
+                    <Tag text="Default" extra={<CheckCircleFilled />} />
+                  )}
                 </div>
               ),
               children: (

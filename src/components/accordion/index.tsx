@@ -1,3 +1,4 @@
+import { DownOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 
 interface AccordionProps {
@@ -32,11 +33,11 @@ const Accordion = ({ defaultActiveIndex = 0, items }: AccordionProps) => {
               onClick={() => handleActiveIndexChange(item?.key)}
             >
               <span>{item?.title}</span>
-              {/* <DownOutlined
+              <DownOutlined
                 className={`transition-all duration-100 ${
                   activeIndex === item?.key ? "rotate-180" : ""
                 }`}
-              /> */}
+              />
             </button>
           </>
           <div
