@@ -4,23 +4,34 @@ import Tag from "./components/tag";
 import { CheckCircleFilled } from "@ant-design/icons";
 
 const App = () => {
-  const [autoFillEnabled, setAutoFillEnabled] = useState(false);
+  const [autoFillCoverLetterEnabled, setAutoFillCoverLetterEnabled] =
+    useState(false);
   const [proposal, setProposal] = useState("");
   const [proposal2, setProposal2] = useState("");
   const [defaultProposal, setDefaultProposal] = useState(0);
+  const [autofillGithubRepoEnabled, setAutoFillGithubRepoEnabled] =
+    useState(false);
+  const [githubRepoUrl, setGithubRepoUrl] = useState("");
 
   const handleToggleDefault = (proposalKey: number) => {
     setDefaultProposal(proposalKey);
   };
 
   const handleAutoFillToggle = () => {
-    setAutoFillEnabled((prev) => !prev);
+    setAutoFillCoverLetterEnabled((prev) => !prev);
   };
 
   useEffect(() => {
     // Fill state based on stored values
     chrome?.storage?.local?.get(
-      ["proposal", "autoFillCoverLetter", "proposal2", "defaultProposal"],
+      [
+        "proposal",
+        "autoFillCoverLetter",
+        "proposal2",
+        "defaultProposal",
+        "autoFillGithubURL",
+        "githubRepoUrl",
+      ],
       (data) => {
         if (data?.proposal) {
           setProposal(data?.proposal);
@@ -29,15 +40,22 @@ const App = () => {
           setProposal2(data?.proposal2);
         }
         if (data?.autoFillCoverLetter) {
-          setAutoFillEnabled(true);
+          setAutoFillCoverLetterEnabled(true);
         }
         if (data?.defaultProposal) {
           setDefaultProposal(data?.defaultProposal);
+        }
+        if (data?.autoFillGithubURL) {
+          setAutoFillGithubRepoEnabled(data?.autoFillGithubURL);
+        }
+        if (data?.githubRepoUrl) {
+          setGithubRepoUrl(data?.githubRepoUrl);
         }
       }
     );
   }, []);
 
+  // Store proposal 1 in local storage
   useEffect(() => {
     // Debounce event before storing in chrome storage
     const localChromeStorage = chrome?.storage?.local;
@@ -57,6 +75,7 @@ const App = () => {
     return () => clearTimeout(timeout);
   }, [proposal]);
 
+  // Store proposal 2 in local storage
   useEffect(() => {
     // Debounce event before storing in chrome storage
     const localChromeStorage = chrome?.storage?.local;
@@ -75,11 +94,36 @@ const App = () => {
     return () => clearTimeout(timeout);
   }, [proposal2]);
 
+  // Store github url in local storage
+  useEffect(() => {
+    // Debounce event before storing in chrome storage
+    const localChromeStorage = chrome?.storage?.local;
+    const timeout = setTimeout(() => {
+      localChromeStorage?.get(["githubRepoUrl"], (data) => {
+        if (data?.githubRepoUrl) {
+          localChromeStorage?.remove("githubRepoUrl");
+        }
+
+        localChromeStorage?.set({
+          githubRepoUrl,
+        });
+      });
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [githubRepoUrl]);
+
   useEffect(() => {
     chrome?.storage?.local?.set({
-      autoFillCoverLetter: autoFillEnabled,
+      autoFillCoverLetter: autoFillCoverLetterEnabled,
     });
-  }, [autoFillEnabled]);
+  }, [autoFillCoverLetterEnabled]);
+
+  useEffect(() => {
+    chrome?.storage?.local?.set({
+      autoFillGithubURL: autofillGithubRepoEnabled,
+    });
+  }, [autofillGithubRepoEnabled]);
 
   useEffect(() => {
     chrome?.storage?.local?.set({
@@ -95,15 +139,14 @@ const App = () => {
           id="autofill-checkbox"
           type="checkbox"
           className="w-4 h-4 bg-gray-100 border-gray-300 rounded"
-          checked={autoFillEnabled}
+          checked={autoFillCoverLetterEnabled}
           onChange={handleAutoFillToggle}
         />
         <label htmlFor="autofill-checkbox" className="ms-2 text-sm font-medium">
-          Autofill Cover Letter
+          Auto-fill Cover Letter
         </label>
       </div>
-      {autoFillEnabled && (
-        // TODO: ADD SECONDARY PROPOSAL
+      {autoFillCoverLetterEnabled && (
         <Accordion
           defaultActiveIndex={defaultProposal}
           items={[
@@ -128,7 +171,7 @@ const App = () => {
                     id="proposal"
                     rows={12}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    placeholder="Write your customized proposal here..."
+                    placeholder="Your customized proposal..."
                     value={proposal}
                     onChange={(e) => setProposal(e?.target?.value)}
                   />
@@ -172,7 +215,7 @@ const App = () => {
                     id="proposal"
                     rows={12}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    placeholder="Write your customized proposal here..."
+                    placeholder="Your customized proposal..."
                     value={proposal2}
                     onChange={(e) => setProposal2(e?.target?.value)}
                   />
@@ -197,6 +240,39 @@ const App = () => {
             },
           ]}
         />
+      )}
+      <div className="flex items-center my-4">
+        <input
+          id="autofill-github-url"
+          type="checkbox"
+          className="w-4 h-4 bg-gray-100 border-gray-300 rounded"
+          checked={autofillGithubRepoEnabled}
+          onChange={() => setAutoFillGithubRepoEnabled((prev) => !prev)}
+        />
+        <label
+          htmlFor="autofill-github-url"
+          className="ms-2 text-sm font-medium"
+        >
+          Auto-fill Github Project URL
+        </label>
+      </div>
+      {autofillGithubRepoEnabled && (
+        <div>
+          <label
+            htmlFor="github-repo-url-input"
+            className="block mb-2 text-sm font-medium text-gray-900"
+          >
+            Github Project URL
+          </label>
+          <input
+            type="url"
+            id="github-repo-url-input"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="Your Github Project URL"
+            value={githubRepoUrl}
+            onChange={(e) => setGithubRepoUrl(e.target?.value)}
+          />
+        </div>
       )}
     </>
   );
