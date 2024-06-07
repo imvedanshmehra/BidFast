@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import Accordion from "./components/accordion";
 import Tag from "./components/tag";
-import { CheckCircleFilled } from "@ant-design/icons";
+import {
+  CheckCircleFilled,
+  MoonOutlined,
+  SunOutlined,
+} from "@ant-design/icons";
 
 const App = () => {
   const [autoFillCoverLetterEnabled, setAutoFillCoverLetterEnabled] =
@@ -12,6 +16,7 @@ const App = () => {
   const [autofillGithubRepoEnabled, setAutoFillGithubRepoEnabled] =
     useState(false);
   const [githubRepoUrl, setGithubRepoUrl] = useState("");
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const handleToggleDefault = (proposalKey: number) => {
     setDefaultProposal(proposalKey);
@@ -131,9 +136,26 @@ const App = () => {
     });
   }, [defaultProposal]);
 
+  const darkModeHandler = () => {
+    setIsDarkMode((prev) => !prev);
+    document.body.classList.toggle("dark");
+  };
+
   return (
     <>
-      <h2 className="text-xl font-semibold text-center mb-2">BidFast 🚀</h2>
+      <div className="flex items-center mb-2">
+        <h2 className="flex-1 text-xl font-semibold text-center dark:text-white">
+          BidFast 🚀
+        </h2>
+        <button
+          onClick={darkModeHandler}
+          className={`dark:text-white text-2xl mr-4 bg-gray-200 dark:bg-gray-800 w-10 h-10 rounded-full`}
+          title={`Switch to ${isDarkMode ? "Light" : "Dark"} Theme`}
+        >
+          {isDarkMode && <SunOutlined />}
+          {!isDarkMode && <MoonOutlined />}
+        </button>
+      </div>
       <div className="flex items-center mb-4">
         <input
           id="autofill-checkbox"
@@ -142,7 +164,10 @@ const App = () => {
           checked={autoFillCoverLetterEnabled}
           onChange={handleAutoFillToggle}
         />
-        <label htmlFor="autofill-checkbox" className="ms-2 text-sm font-medium">
+        <label
+          htmlFor="autofill-checkbox"
+          className="ms-2 text-sm font-medium dark:text-white"
+        >
           Auto-fill Cover Letter
         </label>
       </div>
@@ -156,7 +181,7 @@ const App = () => {
                 <div className="flex items-center gap-2 mb-2">
                   <label
                     htmlFor="proposal1"
-                    className="block text-sm font-medium text-gray-900"
+                    className="block text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Proposal 1
                   </label>
@@ -170,14 +195,14 @@ const App = () => {
                   <textarea
                     id="proposal"
                     rows={12}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    className="bg-gray-50 dark:bg-gray-900 dark:text-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     placeholder="Your customized proposal..."
                     maxLength={5000}
                     value={proposal}
                     onChange={(e) => setProposal(e?.target?.value)}
                   />
                   {!!proposal && (
-                    <p className="text-xs font-light">
+                    <p className="text-xs font-light dark:text-gray-400">
                       {5000 - proposal?.length} Characters Left
                     </p>
                   )}
@@ -192,7 +217,7 @@ const App = () => {
                     />
                     <label
                       htmlFor="autofill-checkbox"
-                      className="ms-2 text-sm font-medium"
+                      className="ms-2 text-sm font-medium dark:text-white"
                     >
                       Mark as Default
                     </label>
@@ -206,7 +231,7 @@ const App = () => {
                 <div className="flex items-center gap-2 mb-2">
                   <label
                     htmlFor="proposal2"
-                    className="block text-sm font-medium text-gray-900"
+                    className="block text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Proposal 2
                   </label>
@@ -220,14 +245,14 @@ const App = () => {
                   <textarea
                     id="proposal"
                     rows={12}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    className="bg-gray-50 dark:bg-gray-900 dark:text-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     placeholder="Your customized proposal..."
                     maxLength={5000}
                     value={proposal2}
                     onChange={(e) => setProposal2(e?.target?.value)}
                   />
                   {!!proposal2 && (
-                    <p className="text-xs font-light">
+                    <p className="text-xs font-light dark:text-gray-400">
                       {5000 - proposal2?.length} Characters Left
                     </p>
                   )}
@@ -242,7 +267,7 @@ const App = () => {
                     />
                     <label
                       htmlFor="autofill-checkbox"
-                      className="ms-2 text-sm font-medium"
+                      className="ms-2 text-sm font-medium dark:text-white"
                     >
                       Mark as Default
                     </label>
@@ -263,7 +288,7 @@ const App = () => {
         />
         <label
           htmlFor="autofill-github-url"
-          className="ms-2 text-sm font-medium"
+          className="ms-2 text-sm font-medium dark:text-white"
         >
           Auto-fill Github Project URL
         </label>
@@ -272,14 +297,14 @@ const App = () => {
         <div>
           <label
             htmlFor="github-repo-url-input"
-            className="block mb-2 text-sm font-medium text-gray-900"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
             Github Project URL
           </label>
           <input
             type="url"
             id="github-repo-url-input"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            className="bg-gray-50 dark:bg-gray-900 dark:text-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="Your Github Project URL"
             value={githubRepoUrl}
             onChange={(e) => setGithubRepoUrl(e.target?.value)}

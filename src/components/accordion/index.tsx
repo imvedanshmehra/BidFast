@@ -25,11 +25,11 @@ const Accordion = ({ defaultActiveIndex = 0, items }: AccordionProps) => {
         <React.Fragment key={item?.key}>
           <>
             <button
-              className={`flex items-center justify-between w-full p-4 font-medium rtl:text-right  text-gray-500 border border-gray-200 ${
+              className={`flex items-center justify-between w-full p-4 font-medium rtl:text-right  text-gray-500 border border-gray-200 dark:border-gray-800 ${
                 item?.key === 0 && "rounded-t-md border-b-0"
               } ${
                 item?.key === items?.length - 1 && "rounded-b-md"
-              }  hover:bg-gray-100 gap-3`}
+              }  hover:bg-gray-100 dark:bg-gray-900 gap-3`}
               onClick={() => handleActiveIndexChange(item?.key)}
             >
               <span>{item?.title}</span>
@@ -41,7 +41,7 @@ const Accordion = ({ defaultActiveIndex = 0, items }: AccordionProps) => {
             </button>
           </>
           <div
-            className={`border border-gray-200 p-2 ${
+            className={`border border-gray-200 dark:border-gray-800 p-2 ${
               item?.key !== activeIndex ? "hidden" : ""
             }`}
           >
